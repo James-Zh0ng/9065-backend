@@ -1,5 +1,5 @@
 import admin from '../../utils/firebaseAdmin';
-import allowCors from '../../utils/cors';
+import unifiedCorsMiddleware from '../../utils/cors'; // Adjust the path as needed
 import verifyToken from '../../utils/verifyToken';
 
 // Utility function to save book lists
@@ -27,21 +27,19 @@ const getBookLists = async (userId) => {
     }
 };
 
-// Updated handler function with allowCors
-export default allowCors(async function handler(req, res) {
-    await cors()(req, res, async () => {
-        await verifyToken(req, res, async () => {
-            const userId = req.user.uid;
-            if (req.method === 'POST') {
-                const bookLists = req.body;
-                await saveBookLists(userId, bookLists);
-                res.status(200).json({ message: 'Book lists saved successfully' });
-            } else if (req.method === 'GET') {
-                const bookLists = await getBookLists(userId);
-                res.status(200).json({ bookLists });
-            } else {
-                res.status(405).json({ error: 'Method not allowed' });
-            }
-        });
+// Updated handler function with unifiedCorsMiddleware
+export default unifiedCorsMiddleware(async function handler(req, res) {
+    await verifyToken(req, res, async () => {
+        const userId = req.user.uid;
+        if (req.method === 'POST') {
+            const bookLists = req.body;
+            await saveBookLists(userId, bookLists);
+            res.status(200).json({ message: 'Book lists saved successfully' });
+        } else if (req.method === 'GET') {
+            const bookLists = await getBookLists(userId);
+            res.status(200).json({ bookLists });
+        } else {
+            res.status(405).json({ error: 'Method not allowed' });
+        }
     });
 });

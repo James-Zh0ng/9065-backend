@@ -1,5 +1,5 @@
 import axios from 'axios';
-import allowCors from '../../utils/cors';
+import unifiedCorsMiddleware from '../../utils/cors'; // Adjust this import path as needed
 
 // Asynchronous function to fetch books
 async function fetchBooks(query) {
@@ -37,5 +37,5 @@ const handler = async (req, res) => {
   }
 }
 
-// Apply the CORS middleware to the handler
-export default allowCors(handler);
+// Apply the unified CORS middleware to the handler
+export default unifiedCorsMiddleware(handler);
