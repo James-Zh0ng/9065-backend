@@ -1,7 +1,6 @@
 import admin from '../../utils/firebaseAdmin';
-import cors from '../../utils/cors';
+import allowCors from '../../utils/cors';
 import verifyToken from '../../utils/verifyToken';
-import allowCors from '../../utils/allowCors'; // Adjust this import path as needed
 
 // Utility function to save book lists
 const saveBookLists = async (userId, bookLists) => {
