@@ -1,5 +1,5 @@
 import axios from 'axios';
-import unifiedCorsMiddleware from '../../utils/cors'; // Adjust this import path as needed
+import Cors from 'cors';
 
 // Asynchronous function to fetch books
 async function fetchBooks(query) {
@@ -12,7 +12,29 @@ async function fetchBooks(query) {
   }
 }
 
-// Handler function for processing requests
+// Initialize CORS with options
+const corsOptions = {
+  origin: '*', // This should be more restrictive in production
+  methods: ['GET', 'HEAD', 'POST'], // Specify allowed methods
+};
+
+// Middleware for CORS
+function allowCors(fn) {
+  return async function(req, res) {
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', corsOptions.origin);
+    res.setHeader('Access-Control-Allow-Methods', corsOptions.methods.join(','));
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    
+    if (req.method === 'OPTIONS') {
+      res.status(200).end();
+      return;
+    }
+
+    return await fn(req, res);
+  }
+}
+
 const handler = async (req, res) => {
   const { searchTerm, category } = req.query;
   try {
@@ -37,5 +59,4 @@ const handler = async (req, res) => {
   }
 }
 
-// Apply the unified CORS middleware to the handler
-export default unifiedCorsMiddleware(handler);
+export default allowCors(handler);
