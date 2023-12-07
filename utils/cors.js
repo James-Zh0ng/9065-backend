@@ -9,7 +9,7 @@ const corsOptions = {
 
 // Define a function that applies additional CORS settings
 function allowCors(req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001"); // Adjust this as needed
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Adjust this as needed
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Ensure 'Authorization' header is allowed
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
